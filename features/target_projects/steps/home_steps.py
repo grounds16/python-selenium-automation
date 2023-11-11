@@ -1,5 +1,10 @@
 from selenium.webdriver.common.by import By
-from behave import when, then
+from behave import given, when, then
+
+
+@given('User navigates to target circle')
+def navigate_to_target_circle(context):
+    context.driver.get('https://www.target.com/circle')
 
 
 @when('User selects the cart button')
@@ -29,3 +34,9 @@ def verify_signin_is_displayed(context):
     actual_message = context.driver.find_element(By.XPATH, "//h1[contains(@class,'styles__StyledHeading')]/span").text
     expected_message = "Sign into your Target account"
     assert actual_message == expected_message, f"Sign in message does match, actual message = {actual_message}"
+
+
+@then('Verify there {number} benefit cards are displayed')
+def verify_the_amount_of_benefits(context, number):
+    amount_benefit_cards = len(context.driver.find_elements(By.XPATH, "//li[contains(@class, 'styles__BenefitCard')]"))
+    assert amount_benefit_cards == int(number), f"Amount of benefit cards ({amount_benefit_cards}) does not match the expected ({number})"
