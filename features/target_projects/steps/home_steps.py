@@ -6,6 +6,9 @@ from behave import given, when, then
 def navigate_to_target_circle(context):
     context.driver.get('https://www.target.com/circle')
 
+@given('User navigates to shirt page')
+def navigate_to_target_circle(context):
+    context.driver.get('https://www.target.com/p/A-88345426')
 
 @when('User selects the cart button')
 def selects_cart(context):
@@ -40,3 +43,5 @@ def verify_signin_is_displayed(context):
 def verify_the_amount_of_benefits(context, number):
     amount_benefit_cards = len(context.driver.find_elements(By.XPATH, "//li[contains(@class, 'styles__BenefitCard')]"))
     assert amount_benefit_cards == int(number), f"Amount of benefit cards ({amount_benefit_cards}) does not match the expected ({number})"
+
+

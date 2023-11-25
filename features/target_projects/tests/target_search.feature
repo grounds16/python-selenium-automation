@@ -18,6 +18,11 @@ Feature: Search tests
         When User selects the cart button
         Then Verify item is in cart
 
+    Scenario: Verify colors on products
+        Given User navigates to shirt page
+        Then Verify colors matches title
+
+
 
     Scenario Outline: User can search for a product
     Given Open target main page

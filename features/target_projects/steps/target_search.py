@@ -1,5 +1,6 @@
 from time import sleep
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from behave import given, when, then
 
 
@@ -13,7 +14,6 @@ def search_product(context, product):
     context.driver.find_element(By.ID, 'search').send_keys(product)
     context.product = product
     context.driver.find_element(By.XPATH, "//button[@data-test='@web/Search/SearchButton']").click()
-    sleep(6)
 
 
 @then('Verify search worked for {product}')
@@ -41,10 +41,24 @@ def select_cart(context):
             break
         else:
             counter += 1
+    context.driver.wait.until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "h4[class*='StyleHeading']")),
+        message="Product name not shown in side navigation")
     context.driver.find_element(By.XPATH, "//button[@aria-label='close']").click()
 
 
 @then('Verify item is in cart')
 def verify_item_is_in_cart(context):
     item_in_cart = context.driver.find_element(By.XPATH, "//div[@data-test='cartItem-title']").text
-    assert item_in_cart == context.fullProductsName , f"item in cart ('{item_in_cart}') does not match products name ('{context.fullProductsName}')"
+    assert item_in_cart == context.fullProductsName, f"item in cart ('{item_in_cart}') does not match products name ('{context.fullProductsName}')"
+
+
+@then('Verify colors matches title')
+def verify_colors_are_matching_titles(context):
+    expected_colors = ["Brown", "Oatmeal", "Gray", "Black"]
+    actual_color = context.driver.find_element(By.XPATH, '//div[contains(@class, "styles__BaseVariationSelectorWrapper")][2]/div[1]')
+    color_checkbox = context.driver.find_elements(By.XPATH, "//div[contains(@class, 'styles__ButtonWrapper')]/a/img")
+
+    for counter in range(0, len(color_checkbox) - 1):
+        color_checkbox[counter].click()
+        assert expected_colors[counter] in actual_color.text, f"Actual Color: '{actual_color.text}' does not match Expected Color: '{expected_colors[counter]}'"
