@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
 from behave import given, when, then
 
+@given('Open target main page')
+def open_target(context):
+    context.app.home_page.open_main()
 
 @given('User navigates to target circle')
 def navigate_to_target_circle(context):
@@ -10,16 +13,14 @@ def navigate_to_target_circle(context):
 def navigate_to_target_circle(context):
     context.driver.get('https://www.target.com/p/A-88345426')
 
+@when('Search for {product}')
+def search_product(context, product):
+    context.product = product
+    context.app.home_page.search(product)
+
 @when('User selects the cart button')
 def selects_cart(context):
-    context.driver.find_element(By.XPATH, "//div[@data-test='@web/CartIcon']").click()
-
-
-@then('Verify Cart is empty')
-def verify_empty_cart(context):
-    actual_message = context.driver.find_element(By.XPATH, "//div[@data-test='boxEmptyMsg']").text
-    expected_message = "Your cart is empty"
-    assert actual_message == expected_message, f"Cart is not empty, actual message is {actual_message}"
+    context.app.home_page.cart()
 
 
 @when('User selects Signin')

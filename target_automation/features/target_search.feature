@@ -1,10 +1,4 @@
 Feature: Search tests
-    Scenario: User can search for coffee
-        Given Open target main page
-        When search for coffee
-        Then Verify search worked for coffee
-        And Verify coffee in search result url
-
     Scenario: User can search for products
         Given Open target main page
         When search for tea
