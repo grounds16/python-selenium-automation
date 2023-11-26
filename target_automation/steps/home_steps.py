@@ -15,7 +15,6 @@ def navigate_to_target_circle(context):
 
 @when('Search for {product}')
 def search_product(context, product):
-    context.product = product
     context.app.home_page.search(product)
 
 @when('User selects the cart button')
@@ -25,20 +24,16 @@ def selects_cart(context):
 
 @when('User selects Signin')
 def user_selects_signin(context):
-    context.driver.find_element(By.XPATH, "//span[contains(@class, 'styles__LinkText')]").click()
+    context.app.home_page.click_signin()
 
 
 @when('User selects Signin from the sign menu')
 def user_selects_signin_from_side_menu(context):
-    context.driver.find_element(By.XPATH, "//a[@data-test='accountNav-signIn']").click()
-
+    context.app.home_page.click_signin_from_account_menu()
 
 @then('Verify Signin Form is displayed')
 def verify_signin_is_displayed(context):
-    actual_message = context.driver.find_element(By.XPATH, "//h1[contains(@class,'styles__StyledHeading')]/span").text
-    expected_message = "Sign into your Target account"
-    assert actual_message == expected_message, f"Sign in message does match, actual message = {actual_message}"
-
+    context.app.home_page.verify_signin_form()
 
 @then('Verify there {number} benefit cards are displayed')
 def verify_the_amount_of_benefits(context, number):
